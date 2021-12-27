@@ -11,7 +11,7 @@ export function renderSearchFormBlock (dateIn: string = getChangeDay(1), dateOut
   renderBlock(
     'search-form-block',
     `
-    <form>
+    <form onsubmit="search(e)">
       <fieldset class="search-filedset">
         <div class="row">
           <div>
@@ -38,11 +38,16 @@ export function renderSearchFormBlock (dateIn: string = getChangeDay(1), dateOut
             <input id="max-price" type="text" value="" name="price" class="max-price" />
           </div>
           <div>
-            <div><button>Найти</button></div>
+            <div><button type="submit">Найти</button></div>
           </div>
         </div>
       </fieldset>
     </form>
     `
   )
-}
+};
+
+// function search(e): void {
+//   console.log('Данные для отправки на сервер');
+//   e.preventDefault();
+// };
