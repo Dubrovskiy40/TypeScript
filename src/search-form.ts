@@ -35,6 +35,23 @@ const getDateString = (date: Date) => {
   return `${year}-${month}-${day}`;
 };
 
+interface SearchFormData {
+  dateIn: string,
+  dateOut: string,
+  maxPrice: number
+}
+const formValue: SearchFormData = {
+  dateIn: '',
+  dateOut: '',
+  maxPrice: null
+};
+
+const search = (e, SearchFormData): void => {
+  e.preventDefault();
+  console.log('Данные для отправки на сервер');
+  console.log(SearchFormData);
+}
+
 export function renderSearchFormBlock (arrivalDate: Date = getTomorrow(), leavingDate: Date = getPlusTwoDay(arrivalDate)) {
   const arrivalString = getDateString(arrivalDate);
   const leavingString = getDateString(leavingDate);
@@ -78,9 +95,4 @@ export function renderSearchFormBlock (arrivalDate: Date = getTomorrow(), leavin
     </form>
     `
   )
-};
-
-function search(e): void {
-  e.preventDefault();
-  console.log('Данные для отправки на сервер');
-};
+}
