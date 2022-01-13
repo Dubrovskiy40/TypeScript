@@ -14,7 +14,7 @@ const getNextMonthLastDay = () => {
   return new Date(today.getFullYear(), today.getMonth() + 2, 0);
 };
 
-const getPlusTwoDay = (arrival: Date) => {
+export const getPlusTwoDays = (arrival: Date) => {
   const leaving = new Date(arrival);
   leaving.setDate(leaving.getDate() + 2);
 
@@ -27,7 +27,7 @@ const addZero = (dateNumber: number): string => {
   return (isSingle ? '0' : '') + dateNumber;
 };
 
-const getDateString = (date: Date) => {
+export const getDateString = (date: Date) => {
   const year = date.getFullYear();
   const month = addZero(date.getMonth() + 1);
   const day = addZero(date.getDate());
@@ -36,23 +36,49 @@ const getDateString = (date: Date) => {
 };
 
 interface SearchFormData {
-  dateIn: string,
-  dateOut: string,
-  maxPrice: number
-}
-const formValue: SearchFormData = {
-  dateIn: '',
-  dateOut: '',
-  maxPrice: null
-};
-
-const search = (e, SearchFormData): void => {
-  e.preventDefault();
-  console.log('Данные для отправки на сервер');
-  console.log(SearchFormData);
+  city?: string,
+  checkInDate?: Date,
+  checkOutDate?: Date,
+  maxPrice?: number
 }
 
-export function renderSearchFormBlock (arrivalDate: Date = getTomorrow(), leavingDate: Date = getPlusTwoDay(arrivalDate)) {
+export function getSearch(): void {
+  const form = document.getElementById('search-form-block');
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    search(getSearchInput(), (result) => {
+      console.log(result);
+    })
+  })
+}
+
+function getSearchInput() {
+  const { value: city } = document.getElementById('city') as HTMLInputElement;
+  const { value: checkInDate } = document.getElementById('check-in-date') as HTMLInputElement;
+  const { value: checkOutDate } = document.getElementById('check-out-date') as HTMLInputElement;
+  const { value: maxPrice } = document.getElementById('max-price') as HTMLInputElement;
+
+  return {
+    city,
+    checkInDate: checkInDate ? new Date(checkInDate) : null,
+    checkOutDate: checkOutDate ? new Date(checkOutDate) : null,
+    maxPrice: maxPrice ? Number(maxPrice) : null
+  } as SearchFormData
+}
+
+function search(searchForm: SearchFormData, resultCallBack: (result: Error | []) => void) {
+  console.log(searchForm)
+  setTimeout(() => {
+    const isError = Math.random() < 0.5
+    if (isError) {
+      resultCallBack(new Error('error'))
+    } else {
+      resultCallBack([])
+    }
+  }, 2000)
+}
+
+export function renderSearchFormBlock (arrivalDate: Date = getTomorrow(), leavingDate: Date = getPlusTwoDays(arrivalDate)) {
   const arrivalString = getDateString(arrivalDate);
   const leavingString = getDateString(leavingDate);
   const minDate = getDateString(new Date());
@@ -61,7 +87,7 @@ export function renderSearchFormBlock (arrivalDate: Date = getTomorrow(), leavin
   renderBlock(
     'search-form-block',
     `
-    <form onsubmit="search(e)">
+    <form>
       <fieldset class="search-filedset">
         <div class="row">
           <div>
