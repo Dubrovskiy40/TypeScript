@@ -1,11 +1,21 @@
-export function renderBlock (elementId: string, html: string) : void {
+export function renderBlock (elementId: string, html: string): void {
   const element = document.getElementById(elementId)
-  element.innerHTML = html
-};
+  if (element) {element.innerHTML = html}
+}
 
-export function renderToast (message, action) : void {
-  let messageText : string = '';
-  
+interface Message {
+  type: string,
+  text: string
+}
+
+interface Action {
+  name: string,
+  handler: Function
+}
+
+export function renderToast (message: Message | null, action?: Action): void {
+  let messageText = '';
+
   if (message != null) {
     messageText = `
       <div id="info-block" class="info-block ${message.type}">
@@ -29,4 +39,4 @@ export function renderToast (message, action) : void {
       renderToast(null, action)
     }
   }
-};
+}
